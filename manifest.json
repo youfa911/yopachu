@@ -10,7 +10,7 @@
   "theme_color": "#00e676",
   "icons": [
   {
-    "src": "icon-512.png",
+    "src": "/yopachu/icon-512.png"
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "any"
