@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yopachu Downloader</title>
+  <meta name="description" content="Download TikTok tanpa watermark oleh Yopachu" />
+  <meta name="theme-color" content="#ff0050" />
+  <script>
+    function makeIcon(size) {
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const x = c.getContext('2d'), s = size;
+      x.fillStyle = '#080808'; x.fillRect(0,0,s,s);
+      const g = x.createLinearGradient(0,0,s,s);
+      g.addColorStop(0,'rgba(255,0,80,0.35)'); g.addColorStop(1,'rgba(0,225,255,0.15)');
+      x.fillStyle = g; x.fillRect(0,0,s,s);
+      x.strokeStyle = '#ff0050'; x.lineWidth = s*0.045;
+      x.strokeRect(s*0.07,s*0.07,s*0.86,s*0.86);
+      const a = s*0.12; x.strokeStyle = '#00e1ff'; x.lineWidth = s*0.035;
+      x.beginPath(); x.moveTo(s*0.07,s*0.07+a); x.lineTo(s*0.07,s*0.07); x.lineTo(s*0.07+a,s*0.07); x.stroke();
+      x.beginPath(); x.moveTo(s*0.93,s*0.93-a); x.lineTo(s*0.93,s*0.93); x.lineTo(s*0.93-a,s*0.93); x.stroke();
+      x.fillStyle = '#ffffff'; x.font = '900 '+Math.round(s*0.62)+'px "Arial Black",Arial,sans-serif';
+      x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('Y',s/2,s/2+s*0.04);
+      x.fillStyle = '#ff0050'; x.fillRect(s*0.28,s*0.8,s*0.44,s*0.035);
+      return c.toDataURL('image/png');
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const i192 = makeIcon(192), i512 = makeIcon(512);
+      const fl = document.createElement('link'); fl.rel='icon'; fl.href=i192; document.head.appendChild(fl);
+      const al = document.createElement('link'); al.rel='apple-touch-icon'; al.href=i192; document.head.appendChild(al);
+      const manifest = {name:"Yopachu Downloader",short_name:"Yopachu",description:"Download TikTok tanpa watermark",start_url:"/",display:"standalone",background_color:"#080808",theme_color:"#ff0050",icons:[{src:i192,sizes:"192x192",type:"image/png"},{src:i512,sizes:"512x512",type:"image/png"}]};
+      const ml = document.createElement('link'); ml.rel='manifest'; ml.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'})); document.head.appendChild(ml);
+    });
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #ff0050;
+      --cyan: #00e1ff;
+      --bg: #080808;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+    }
+
+    /* background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,0,80,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,80,.04) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* glow blobs */
+    body::after {
+      content: '';
+      position: fixed;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,225,255,.07) 0%, transparent 70%);
+      top: -150px; right: -150px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 36px 28px;
+      animation: fadeUp .5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--red);
+      font-size: 9px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      padding: 4px 12px;
+      margin-bottom: 18px;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 9vw, 58px);
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #fff 40%, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      font-size: 10px;
+      color: rgba(255,255,255,.3);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: rgba(255,255,255,.25);
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: blink 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: .15; }
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .input-wrap { position: relative; flex: 1; }
+
+    input {
+      width: 100%;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      padding: 14px 44px 14px 14px;
+      outline: none;
+      border-radius: 2px;
+      transition: border-color .2s;
+    }
+
+    input:focus { border-color: var(--red); }
+    input::placeholder { color: rgba(255,255,255,.2); }
+
+    .paste-btn {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: rgba(255,255,255,.3);
+      cursor: pointer; font-size: 16px;
+      transition: color .2s;
+    }
+    .paste-btn:hover { color: var(--cyan); }
+
+    .get-btn {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      padding: 14px 22px;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      transition: background .2s, transform .1s;
+      white-space: nowrap;
+    }
+    .get-btn:hover { background: #cc003e; }
+    .get-btn:active { transform: scale(.97); }
+    .get-btn:disabled { background: rgba(255,0,80,.3); cursor: not-allowed; }
+
+    .error {
+      font-size: 11px;
+      color: #ff4d6d;
+      padding: 10px 14px;
+      background: rgba(255,0,80,.08);
+      border-left: 2px solid var(--red);
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,.4);
+      display: none;
+      animation: blink 1.2s ease-in-out infinite;
+    }
+
+    .result { display: none; margin-top: 8px; }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 24px 0;
+    }
+
+    .tips {
+      font-size: 11px;
+      color: rgba(0,225,255,.7);
+      padding: 10px 14px;
+      background: rgba(0,225,255,.04);
+      border-left: 2px solid var(--cyan);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    .services { display: flex; flex-direction: column; gap: 10px; }
+
+    .svc {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      transition: border-color .2s, background .2s;
+      text-decoration: none;
+    }
+    .svc:hover {
+      border-color: rgba(0,225,255,.3);
+      background: rgba(0,225,255,.04);
+    }
+
+    .svc-info { flex: 1; }
+    .svc-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 3px; letter-spacing: 1px; }
+    .svc-desc { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .5px; }
+
+    .open-btn {
+      background: transparent;
+      border: 1px solid rgba(0,225,255,.4);
+      color: var(--cyan);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 8px 14px;
+      cursor: pointer;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+      transition: background .2s, color .2s;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .open-btn:hover { background: var(--cyan); color: #000; }
+
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 9px;
+      color: rgba(255,255,255,.12);
+      letter-spacing: 1.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">BY YOPACHU</div>
+    <h1>Yopachu<br>Downloader</h1>
+    <p class="sub">TikTok tanpa watermark &mdash; gratis</p>
+
+    <div class="hint">
+      <div class="dot"></div>
+      Paste link TikTok di bawah
+    </div>
+
+    <div class="input-row">
+      <div class="input-wrap">
+        <input
+          id="urlInput"
+          type="url"
+          inputmode="url"
+          placeholder="https://www.tiktok.com/@user/video/..."
+        />
+        <button class="paste-btn" onclick="pasteURL()" title="Paste">📋</button>
+      </div>
+      <button class="get-btn" id="getBtn" onclick="handleGet()">GET</button>
+    </div>
+
+    <div class="error" id="errorBox"></div>
+    <div class="loading" id="loadingBox">MEMPROSES...</div>
+
+    <div class="result" id="resultBox">
+      <div class="divider"></div>
+      <div class="tips" id="tipsBox"></div>
+      <div class="services" id="servicesBox"></div>
+    </div>
+
+    <div class="footer">UNTUK PENGGUNAAN PRIBADI &mdash; HORMATI HAK CIPTA KONTEN KREATOR</div>
+  </div>
+
+  <script>
+    const urlInput  = document.getElementById('urlInput');
+    const getBtn    = document.getElementById('getBtn');
+    const errorBox  = document.getElementById('errorBox');
+    const loadingBox= document.getElementById('loadingBox');
+    const resultBox = document.getElementById('resultBox');
+    const tipsBox   = document.getElementById('tipsBox');
+    const servicesBox= document.getElementById('servicesBox');
+
+    urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleGet(); });
+
+    async function pasteURL() {
+      try {
+        const t = await navigator.clipboard.readText();
+        urlInput.value = t;
+      } catch { alert('Izinkan akses clipboard lalu coba lagi.'); }
+    }
+
+    function isValidTikTok(u) {
+      return /tiktok\.com\/@[\w.]+\/video\/\d+|vm\.tiktok\.com\/\w+|vt\.tiktok\.com\/\w+/.test(u);
+    }
+
+    function showError(msg) {
+      errorBox.textContent = '⚠ ' + msg;
+      errorBox.style.display = 'block';
+    }
+
+    function hideAll() {
+      errorBox.style.display = 'none';
+      loadingBox.style.display = 'none';
+      resultBox.style.display = 'none';
+    }
+
+    function buildServices(url) {
+      const enc = encodeURIComponent(url);
+      return [
+        { name: 'SSSTik',   link: `https://ssstik.io/id#url=${enc}`,         desc: 'Paling populer, tanpa watermark' },
+        { name: 'SnapTik',  link: `https://snaptik.app/id?url=${enc}`,        desc: 'Kualitas HD' },
+        { name: 'SaveTik',  link: `https://savetik.co/id?url=${enc}`,         desc: 'Download audio & video' },
+      ];
+    }
+
+    async function handleGet() {
+      const url = urlInput.value.trim();
+      hideAll();
+
+      if (!url) { showError('Masukkan link TikTok terlebih dahulu.'); return; }
+      if (!isValidTikTok(url)) { showError('Link tidak valid. Contoh: https://www.tiktok.com/@user/video/123456789'); return; }
+
+      getBtn.disabled = true;
+      loadingBox.style.display = 'block';
+
+      let services, tips;
+
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 800,
+            messages: [{
+              role: 'user',
+              content: `URL TikTok: ${url}\n\nBerikan 3 layanan download TikTok tanpa watermark. Balas HANYA JSON:\n{"services":[{"name":"SSSTik","link":"https://ssstik.io/id#url=${encodeURIComponent(url)}","desc":"Paling populer"},{"name":"SnapTik","link":"https://snaptik.app/id?url=${encodeURIComponent(url)}","desc":"Kualitas HD"},{"name":"SaveTik","link":"https://savetik.co/id?url=${encodeURIComponent(url)}","desc":"Audio & video"}],"tips":"Klik BUKA lalu klik tombol Download di halaman yang terbuka."}`
+            }]
+          })
+        });
+        const data = await res.json();
+        const text = (data.content || []).map(c => c.text || '').join('');
+        const clean = text.replace(/```json|```/g, '').trim();
+        const parsed = JSON.parse(clean);
+        services = parsed.services;
+        tips = parsed.tips;
+      } catch {
+        services = buildServices(url);
+        tips = 'Klik BUKA → download langsung di halaman yang terbuka.';
+      }
+
+      loadingBox.style.display = 'none';
+      getBtn.disabled = false;
+
+      tipsBox.textContent = '💡 ' + tips;
+      servicesBox.innerHTML = services.map(s => `
+        <div class="svc">
+          <div class="svc-info">
+            <div class="svc-name">${s.name}</div>
+            <div class="svc-desc">${s.desc || s.description || ''}</div>
+          </div>
+          <a class="open-btn" href="${s.link}" target="_blank" rel="noopener noreferrer">BUKA →</a>
+        </div>
+      `).join('');
+
+      resultBox.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
