@@ -1,0 +1,21 @@
+{
+  "name": "Yopachu Downloader",
+  "short_name": "Yopachu",
+  "description": "Download TikTok tanpa watermark",
+  "start_url": "/yopachu/yopachu.html",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#ff0050",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/ff0050/ffffff?text=Y",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/ff0050/ffffff?text=Y",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
