@@ -1,13 +1,19 @@
 {
-  "background_color": "#ffffff",
-  "dir": "ltr",
-  "display": "standalone",
-  "name": "yopachu downloader",
-  "orientation": "any",
-  "scope": "/",
-  "short_name": "yopachu",
-  "start_url": "/",
-  "theme_color": "#ffffff",
+  "name": "Yopachu Downloader",
+  "short_name": "Yopachu",
+  "description": "Download TikTok tanpa watermark",
+  "start_url": "/yopachu/yopachu.html",
   "id": "/yopachu/yopachu.html",
-  "description": "Download TikTok tanpa watermark"
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080808",
+  "theme_color": "#00e676",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
